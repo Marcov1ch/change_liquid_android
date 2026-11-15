@@ -1,0 +1,137 @@
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
+import { MAX_PLATE_LENGTH, validatePlateNumber } from '../utils/plateValidation';
+import { useBrands, useComponentConfigs, useModels } from './useEnums';
+import type { Vehicle } from '../types';
+
+const YEAR_MIN = 1960;
+
+interface UseVehicleFormOptions {
+    vehicle?: Vehicle | null;
+}
+
+export function useVehicleForm({ vehicle = null }: UseVehicleFormOptions = {}) {
+    const [plateError, setPlateError] = useState('');
+    const [yearError, setYearError] = useState('');
+    const [intervals, setIntervals] = useState<Record<string, number>>({});
+    const [notifyFlags, setNotifyFlags] = useState<Record<string, boolean>>({});
+    const [intervalMonths, setIntervalMonths] = useState<Record<string, number | null>>({});
+    const [formData, setFormData] = useState({
+        brand: '',
+        model: '',
+        plate_number: '',
+        year: 0,
+        current_km: 0,
+    });
+
+    const { data: brandsData } = useBrands();
+    const { data: configsData } = useComponentConfigs();
+    const { data: modelsData } = useModels(formData.brand);
+
+    const brands = brandsData?.brands ?? [];
+    const models = modelsData?.models ?? [];
+    const configs = configsData?.configs ?? [];
+
+    useEffect(() => {
+        if (vehicle) {
+            setFormData({
+                brand: vehicle.brand || '',
+                model: vehicle.model || '',
+                plate_number: vehicle.plate_number || '',
+                year: vehicle.year || new Date().getFullYear(),
+                current_km: vehicle.current_km || 0,
+            });
+            setIntervals(vehicle.intervals || {});
+            setNotifyFlags(vehicle.notify_flags || {});
+            setIntervalMonths(vehicle.interval_months || {});
+        }
+    }, [vehicle]);
+
+    useEffect(() => {
+        if (!configsData) return;
+        const cfgMap: Record<string, number> = {};
+        const monthMap: Record<string, number | null> = {};
+        const notifyMap: Record<string, boolean> = {};
+        configsData.configs.forEach(c => {
+            cfgMap[c.key] = c.default_interval;
+            monthMap[c.key] = c.default_interval_months ?? null;
+            notifyMap[c.key] = true;
+        });
+        notifyMap['tire_change'] = true;
+        notifyMap['insurance'] = true;
+        notifyMap['parking_monthly'] = true;
+        setIntervals(prev => ({ ...cfgMap, ...prev }));
+        setNotifyFlags(prev => ({ ...notifyMap, ...prev }));
+        setIntervalMonths(prev => ({ ...monthMap, ...prev }));
+    }, [configsData]);
+
+    const handlePlateChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.toUpperCase().slice(0, MAX_PLATE_LENGTH);
+        setFormData(prev => ({ ...prev, plate_number: value }));
+        setPlateError(validatePlateNumber(value) || '');
+    };
+
+    const handleIntervalChange = (key: string, value: number) => {
+        setIntervals(prev => ({ ...prev, [key]: value }));
+    };
+
+    const handleIntervalMonthsChange = (key: string, value: number | null) => {
+        setIntervalMonths(prev => ({ ...prev, [key]: value }));
+    };
+
+    const handleNotifyChange = (key: string, checked: boolean) => {
+        setNotifyFlags(prev => ({ ...prev, [key]: checked }));
+    };
+
+    const validateForm = useCallback((): boolean => {
+        const plateErr = validatePlateNumber(formData.plate_number);
+        setPlateError(plateErr || '');
+        if (plateErr) return false;
+
+        const currentYear = new Date().getFullYear();
+        const maxYear = currentYear + 1;
+        if (!Number.isFinite(formData.year) || formData.year > maxYear || formData.year < YEAR_MIN) {
+            setYearError(`Год выпуска должен быть от ${YEAR_MIN} до ${maxYear}`);
+            return false;
+        }
+        setYearError('');
+        return true;
+    }, [formData.plate_number, formData.year]);
+
+    const resetForm = useCallback(() => {
+        setFormData({
+            brand: '',
+            model: '',
+            plate_number: '',
+            year: new Date().getFullYear(),
+            current_km: 0,
+        });
+        setIntervals({});
+        setNotifyFlags({});
+        setIntervalMonths({});
+        setPlateError('');
+        setYearError('');
+    }, []);
+
+    return {
+        formData,
+        setFormData,
+        setYearError,
+        intervals,
+        setIntervals,
+        intervalMonths,
+        setIntervalMonths,
+        notifyFlags,
+        setNotifyFlags,
+        plateError,
+        yearError,
+        brands,
+        models,
+        configs,
+        handlePlateChange,
+        handleIntervalChange,
+        handleIntervalMonthsChange,
+        handleNotifyChange,
+        validateForm,
+        resetForm,
+    };
+}
