@@ -144,4 +144,9 @@
   .fab-bottom {
     bottom: calc(var(--sab, env(safe-area-inset-bottom, 0px)) + 1rem);
   }
+
+  .app-shell {
+    height: calc(100vh - var(--sat) - var(--sab));
+    height: calc(100dvh - var(--sat) - var(--sab));
+  }
 }

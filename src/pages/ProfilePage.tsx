@@ -152,10 +152,10 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-container">
+    <div className="app-shell flex flex-col overflow-hidden bg-surface-container">
       <ProfileHeader onBack={() => navigate('/')} />
 
-      <main className="max-w-3xl mx-auto px-4 py-6">
+      <main className="flex-1 min-h-0 w-full max-w-3xl mx-auto px-4 py-6 overflow-y-auto overscroll-contain">
         <div className="flex flex-col gap-6">
           <ProfileUserCard user={user} />
 

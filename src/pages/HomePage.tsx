@@ -52,10 +52,10 @@ export function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-container">
+    <div className="app-shell flex flex-col overflow-hidden bg-surface-container">
       <HomeHeader />
 
-      <main className="max-w-5xl mx-auto px-4 py-6 pb-24">
+      <main className="flex-1 min-h-0 w-full max-w-5xl mx-auto px-4 py-6 pb-24 overflow-y-auto overscroll-contain">
         <VehicleToolbar
           showArchived={workspace.showArchived}
           onShowArchivedChange={workspace.setShowArchived}

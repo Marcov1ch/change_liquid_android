@@ -7,7 +7,7 @@ export function HomeHeader() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-30 bg-surface-container/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
+    <header className="z-30 shrink-0 bg-surface-container border-b border-outline-variant shadow-md3-1">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A6DFF" strokeWidth="1.5" strokeLinecap="round">

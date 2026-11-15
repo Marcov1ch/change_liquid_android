@@ -65,8 +65,8 @@ export function PublicVehiclePage() {
     }, [vehicle]);
 
     return (
-        <div className="min-h-screen bg-surface-container">
-            <header className="sticky top-0 z-30 bg-surface-container/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
+        <div className="app-shell flex flex-col overflow-hidden bg-surface-container">
+            <header className="z-30 shrink-0 bg-surface-container border-b border-outline-variant shadow-md3-1">
                 <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A6DFF" strokeWidth="1.5" strokeLinecap="round">
                         <circle cx="12" cy="12" r="10" />
@@ -79,7 +79,7 @@ export function PublicVehiclePage() {
                 </div>
             </header>
 
-            <main className="max-w-3xl mx-auto px-4 py-6">
+            <main className="flex-1 min-h-0 w-full max-w-3xl mx-auto px-4 py-6 overflow-y-auto overscroll-contain">
                 {isLoading && (
                     <div className="md3-card p-8 text-center text-outline">Загрузка...</div>
                 )}
