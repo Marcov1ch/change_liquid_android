@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+    --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    --sal: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+    --sar: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  }
+
   *,
   *::before,
   *::after {
@@ -16,11 +23,16 @@
     text-rendering: optimizeLegibility;
   }
 
+  html,
+  body {
+    overscroll-behavior: none;
+  }
+
   body {
     margin: 0;
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    background-color: #FDFBFF;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
+    background-color: #D8E2FF;
     color: #1A1C1E;
   }
 
@@ -127,5 +139,9 @@
 
   .md3-divider {
     @apply border-0 border-t border-outline-variant my-4;
+  }
+
+  .fab-bottom {
+    bottom: calc(var(--sab, env(safe-area-inset-bottom, 0px)) + 1rem);
   }
 }

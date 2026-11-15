@@ -5,6 +5,7 @@ import { ProfileCurrencySection } from '../components/profile/ProfileCurrencySec
 import { ProfileDeleteAccountSection } from '../components/profile/ProfileDeleteAccountSection'
 import { ProfileEmailSection } from '../components/profile/ProfileEmailSection'
 import { ProfileHeader } from '../components/profile/ProfileHeader'
+import { ProfileLogoutSection } from '../components/profile/ProfileLogoutSection'
 import { ProfilePasswordSection } from '../components/profile/ProfilePasswordSection'
 import { ProfileUserCard } from '../components/profile/ProfileUserCard'
 import { useAuth } from '../context/AuthContext'
@@ -18,7 +19,7 @@ import {
 } from '../utils/resendCooldown'
 
 export function ProfilePage() {
-  const { user, updateEmail, markProfileVisited, resendVerification, changePassword, deleteAccount } = useAuth()
+  const { user, logout, updateEmail, markProfileVisited, resendVerification, changePassword, deleteAccount } = useAuth()
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -145,8 +146,13 @@ export function ProfilePage() {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface-container">
       <ProfileHeader onBack={() => navigate('/')} />
 
       <main className="max-w-3xl mx-auto px-4 py-6">
@@ -181,6 +187,8 @@ export function ProfilePage() {
             onConfirmPasswordChange={setConfirmPassword}
             onSubmit={handlePasswordSubmit}
           />
+
+          <ProfileLogoutSection onLogout={handleLogout} />
 
           <ProfileDeleteAccountSection onDelete={handleDeleteAccount} />
         </div>

@@ -38,7 +38,7 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface-container flex items-center justify-center p-4">
       <div className="w-full max-w-sm animate-slide-up">
         <div className="md3-elevated px-8 py-10">
           <div className="flex flex-col items-center mb-8">

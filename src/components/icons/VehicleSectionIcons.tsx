@@ -113,3 +113,23 @@ export function StatisticsIcon({ className = DEFAULT_CLASS }: IconProps) {
     </svg>
   );
 }
+
+export function CarIcon({ className = DEFAULT_CLASS }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 12l1.8-4.8A2 2 0 0 1 7.7 6h8.6a2 2 0 0 1 1.9 1.2L20 12" />
+      <path d="M3 12h18v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+      <circle cx="7.5" cy="17" r="1.3" />
+      <circle cx="16.5" cy="17" r="1.3" />
+    </svg>
+  );
+}

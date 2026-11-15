@@ -33,6 +33,7 @@ export default {
         },
         surface: {
           DEFAULT: '#FDFBFF',
+          container: '#D8E2FF',
           variant: '#E0E2EC',
           on: '#1A1C1E',
           'on-variant': '#44474E',

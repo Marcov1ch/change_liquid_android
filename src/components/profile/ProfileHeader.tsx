@@ -4,7 +4,7 @@ interface Props {
 
 export function ProfileHeader({ onBack }: Props) {
     return (
-        <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
+        <header className="sticky top-0 z-30 bg-surface-container/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
             <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
                 <button
                     onClick={onBack}

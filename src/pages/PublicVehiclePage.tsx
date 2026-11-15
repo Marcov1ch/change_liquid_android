@@ -65,8 +65,8 @@ export function PublicVehiclePage() {
     }, [vehicle]);
 
     return (
-        <div className="min-h-screen bg-surface">
-            <header className="sticky top-0 z-30 bg-surface/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
+        <div className="min-h-screen bg-surface-container">
+            <header className="sticky top-0 z-30 bg-surface-container/95 backdrop-blur-sm border-b border-outline-variant shadow-md3-1">
                 <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A6DFF" strokeWidth="1.5" strokeLinecap="round">
                         <circle cx="12" cy="12" r="10" />

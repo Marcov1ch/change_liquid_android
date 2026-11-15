@@ -1,4 +1,5 @@
 import { useToast } from '../context/ToastContext';
+import { AddVehicleFab } from '../components/AddVehicleFab';
 import { HomeHeader } from '../components/HomeHeader';
 import { VehicleList } from '../components/VehicleList';
 import { VehicleToolbar } from '../components/VehicleToolbar';
@@ -51,16 +52,15 @@ export function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface-container">
       <HomeHeader />
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      <main className="max-w-5xl mx-auto px-4 py-6 pb-24">
         <VehicleToolbar
           showArchived={workspace.showArchived}
           onShowArchivedChange={workspace.setShowArchived}
           activeCount={workspace.activeVehicles.length}
           archivedCount={workspace.archivedVehicles.length}
-          onAddVehicle={actions.openCreateForm}
         />
 
         <VehicleList
@@ -110,6 +110,8 @@ export function HomePage() {
           onStop={() => { void handleStopTrip(); }}
         />
       </main>
+
+      <AddVehicleFab onClick={actions.openCreateForm} />
     </div>
   );
 }
