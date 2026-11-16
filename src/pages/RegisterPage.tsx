@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
+import { PRIVACY_POLICY_URL, openLegalUrl } from '../utils/legal'
 import { buildResendCooldownKey, startResendCooldown } from '../utils/resendCooldown'
 
 export function RegisterPage() {
@@ -127,6 +128,16 @@ export function RegisterPage() {
           <p className="mt-6 text-center text-body-md text-outline">
             Уже есть аккаунт?{' '}
             <Link to="/login" className="text-primary hover:underline underline-offset-2">Войти</Link>
+          </p>
+          <p className="mt-3 text-center text-body-sm text-outline">
+            Регистрируясь, вы принимаете{' '}
+            <button
+              type="button"
+              onClick={() => void openLegalUrl(PRIVACY_POLICY_URL)}
+              className="text-primary hover:underline underline-offset-2"
+            >
+              Политику конфиденциальности
+            </button>
           </p>
         </div>
       </div>

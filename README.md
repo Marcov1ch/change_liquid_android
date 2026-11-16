@@ -70,6 +70,14 @@ android/app/build/outputs/apk/debug/app-debug.apk
 - GPS: `@capacitor/geolocation` (foreground), разрешения `ACCESS_FINE_LOCATION` и `ACCESS_COARSE_LOCATION`.
 - Хранение токенов: `@aparajita/capacitor-secure-storage` (Android Keystore, AES-GCM); `android:allowBackup="false"`.
 - Состояние поездки: `@capacitor/preferences`, переживает перезапуск приложения.
+- Документы: `@capacitor/browser` открывает политику конфиденциальности и страницу удаления аккаунта.
+
+## Публичные документы
+
+- Политика конфиденциальности: https://change-liquid.ru/privacy
+- Удаление аккаунта: https://change-liquid.ru/account-deletion
+
+Ссылки открываются из профиля приложения. Эти же страницы указываются в Google Play Console.
 
 ## Структура
 
