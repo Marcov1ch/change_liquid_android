@@ -86,7 +86,7 @@ export function StatisticsPanel({
       {!hasData ? (
         <div className="flex flex-col items-center gap-3 py-8 text-center">
           <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center">
-            <span className="text-xl">📊</span>
+            <span className="text-xl"></span>
           </div>
           <p className="text-title-sm text-surface-on mb-1">За {year} год расходов нет</p>
           <p className="text-body-md text-outline max-w-sm">

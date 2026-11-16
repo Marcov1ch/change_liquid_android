@@ -7,6 +7,7 @@ import { Modal } from './Modal';
 import { VehicleCardHeader } from './VehicleCardHeader';
 
 interface Props {
+  embedded?: boolean;
   records: FuelRecord[];
   vehicleId: number | null;
   selectedVehicle: Vehicle | undefined;
@@ -24,6 +25,7 @@ function formatConsumption(value: number | null): string {
 }
 
 export function FuelRecordsList({
+  embedded = false,
   records,
   vehicleId,
   selectedVehicle,
@@ -35,7 +37,6 @@ export function FuelRecordsList({
   const {
     showForm,
     editing,
-    openCreateForm,
     openEditForm,
     closeForm,
     handleSubmit,
@@ -67,18 +68,20 @@ export function FuelRecordsList({
 
   return (
     <div className="md3-card overflow-hidden animate-fade-in">
-      <VehicleCardHeader
+      {!embedded && (
+<VehicleCardHeader
         vehicle={selectedVehicle}
         title={`Заправки: ${selectedVehicle.brand} ${selectedVehicle.model}`}
         onClose={onClose}
         onShare={onShare}
       />
+      )}
 
       <div className="p-4">
         {sortedRecords.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-10 text-center">
             <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center">
-              <span className="text-xl">⛽</span>
+              <span className="text-xl"></span>
             </div>
             <p className="text-title-sm text-surface-on mb-1">Нет заправок</p>
             <p className="text-body-md text-outline max-w-sm">
@@ -94,12 +97,12 @@ export function FuelRecordsList({
                 className="flex items-center justify-between gap-3 p-3 rounded-md3-sm bg-surface border border-outline-variant"
               >
                 <div className="min-w-0">
-                  <p className="text-label-lg text-surface-on m-0">📅 {record.fuel_date}</p>
+                  <p className="text-label-lg text-surface-on m-0"> {record.fuel_date}</p>
                   <p className="text-body-sm text-outline m-0">
-                    📍 {record.km_at_fuel.toLocaleString()} км · ⛽ {formatLiters(record.liters)}
+                     {record.km_at_fuel.toLocaleString()} км ·  {formatLiters(record.liters)}
                   </p>
                   <p className="text-body-sm text-outline m-0">
-                    📊 Расход: {formatConsumption(record.consumption_l_per_100km)}
+                     Расход: {formatConsumption(record.consumption_l_per_100km)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -137,14 +140,6 @@ export function FuelRecordsList({
           </div>
         )}
 
-        <div className="mt-4">
-          <button onClick={openCreateForm} className="md3-btn-primary w-full">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Добавить заправку
-          </button>
-        </div>
       </div>
 
       <Modal

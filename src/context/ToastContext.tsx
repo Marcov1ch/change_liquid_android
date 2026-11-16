@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { Check, Info, X } from '@phosphor-icons/react'
 
 type ToastType = 'success' | 'error' | 'info'
 
@@ -60,25 +61,26 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: number) =
         error: 'bg-error',
         info: 'bg-surface-on-variant',
     }
-    const iconMap: Record<ToastType, string> = {
-        success: '✓',
-        error: '✕',
-        info: 'ℹ',
-    }
+    const iconMap = {
+        success: Check,
+        error: X,
+        info: Info,
+    } as const
+    const Icon = iconMap[toast.type]
 
     return (
         <div
             className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-md3-md shadow-md3-3 text-white text-label-md animate-slide-in-right ${bgMap[toast.type]}`}
             role="alert"
         >
-            <span className="text-lg font-bold leading-none">{iconMap[toast.type]}</span>
+            <Icon size={18} weight="bold" aria-hidden="true" />
             <span className="flex-1">{toast.message}</span>
             <button
                 onClick={() => onRemove(toast.id)}
                 className="flex items-center justify-center w-6 h-6 rounded-md3-full hover:bg-white/20 transition-colors text-sm leading-none"
                 aria-label="Закрыть"
             >
-                ✕
+                <X size={14} />
             </button>
         </div>
     )

@@ -2,10 +2,8 @@ import { Modal } from './Modal';
 import { api } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { VehicleFields } from './VehicleFields';
-import { VehicleSizesFields } from './VehicleSizesFields';
 import { useVehicleForm } from '../hooks/useVehicleForm';
-import type { RimSize, TireSize, Vehicle } from '../types';
-import { useEffect, useState } from 'react';
+import type { Vehicle } from '../types';
 
 interface Props {
   isOpen: boolean;
@@ -13,18 +11,14 @@ interface Props {
   vehicle: Vehicle | null;
   onUpdate: () => void;
   onDelete: (id: number) => Promise<void>;
+  isPrimary?: boolean;
+  onSetPrimary?: (id: number) => Promise<void> | void;
+  embedded?: boolean;
 }
 
-export function EditVehicleForm({ isOpen, onClose, vehicle, onUpdate, onDelete }: Props) {
+export function EditVehicleForm({ isOpen, onClose, vehicle, onUpdate, onDelete, isPrimary = false, onSetPrimary, embedded = false }: Props) {
   const { toast } = useToast();
   const form = useVehicleForm({ vehicle });
-  const [rims, setRims] = useState<RimSize[]>([]);
-  const [tires, setTires] = useState<TireSize[]>([]);
-
-  useEffect(() => {
-    setRims(vehicle?.rims ?? []);
-    setTires(vehicle?.tires ?? []);
-  }, [vehicle]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,19 +31,7 @@ export function EditVehicleForm({ isOpen, onClose, vehicle, onUpdate, onDelete }
     if (!vehicle) return;
 
     try {
-      await api.updateVehicle(vehicle.id, {
-        ...form.formData,
-        intervals: form.intervals,
-        notify_flags: form.notifyFlags,
-        interval_months: form.intervalMonths,
-      });
-      await api.updateVehicleSizes(vehicle.id, {
-        rims: rims.map(r => ({
-          ...r,
-          pcd: r.pcd?.trim() || '',
-        })),
-        tires: tires.map(t => ({ size: t.size.trim(), label: t.label?.trim() || null })),
-      });
+      await api.updateVehicle(vehicle.id, form.formData);
       toast.success('Автомобиль обновлён');
       onUpdate();
       onClose();
@@ -66,17 +48,30 @@ export function EditVehicleForm({ isOpen, onClose, vehicle, onUpdate, onDelete }
     onClose();
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Настройки">
+  const content = (
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <VehicleFields form={form} collapsible yearKmInline />
+        <VehicleFields form={form} yearKmInline />
 
-        <VehicleSizesFields
-          rims={rims}
-          tires={tires}
-          onRimsChange={setRims}
-          onTiresChange={setTires}
-        />
+        {vehicle?.is_active !== false && onSetPrimary && (
+          <label className="flex items-start gap-3 p-3 rounded-md3-sm border border-outline-variant bg-surface">
+            <input
+              type="checkbox"
+              checked={isPrimary}
+              disabled={isPrimary}
+              onChange={() => {
+                if (!isPrimary && vehicle) void onSetPrimary(vehicle.id);
+              }}
+              className="mt-0.5 w-5 h-5 rounded-md3-xs accent-primary"
+            />
+            <span className="flex flex-col gap-0.5">
+              <span className="text-body-md text-surface-on">Основная машина</span>
+              <span className="text-body-sm text-outline">
+                На главном экране кнопка «+» добавляет записи именно в эту машину.
+                {isPrimary ? ' Сейчас выбрана.' : ''}
+              </span>
+            </span>
+          </label>
+        )}
 
         <div className="flex flex-col gap-3">
           <button
@@ -96,6 +91,11 @@ export function EditVehicleForm({ isOpen, onClose, vehicle, onUpdate, onDelete }
           <button type="submit" className="md3-btn-primary">Сохранить</button>
         </div>
       </form>
+  );
+
+  return embedded ? content : (
+    <Modal isOpen={isOpen} onClose={onClose} title="Настройки">
+      {content}
     </Modal>
   );
 }

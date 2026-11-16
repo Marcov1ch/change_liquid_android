@@ -8,9 +8,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (vehicle: VehicleFormData) => Promise<void>;
+  embedded?: boolean;
 }
 
-export function VehicleForm({ isOpen, onClose, onSubmit }: Props) {
+export function VehicleForm({ isOpen, onClose, onSubmit, embedded = false }: Props) {
   const { toast } = useToast();
   const form = useVehicleForm();
 
@@ -22,20 +23,14 @@ export function VehicleForm({ isOpen, onClose, onSubmit }: Props) {
     }
 
     try {
-      await onSubmit({
-        ...form.formData,
-        intervals: form.intervals,
-        notify_flags: form.notifyFlags,
-        interval_months: form.intervalMonths,
-      });
+      await onSubmit(form.formData);
       form.resetForm();
     } catch {
       // handled in parent
     }
   };
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Добавить автомобиль">
+  const content = (
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <VehicleFields form={form} />
 
@@ -44,6 +39,11 @@ export function VehicleForm({ isOpen, onClose, onSubmit }: Props) {
           <button type="submit" className="md3-btn-primary">Добавить</button>
         </div>
       </form>
+  );
+
+  return embedded ? content : (
+    <Modal isOpen={isOpen} onClose={onClose} title="Добавить автомобиль">
+      {content}
     </Modal>
   );
 }

@@ -45,6 +45,7 @@ export function ReplacementGroup({
 }: Props) {
     const status = items[0]?.status || 'unknown';
     const statusStyle = getReplacementStatusStyle(status);
+    const StatusIcon = statusStyle.icon;
     const isDateBased = isDateBasedComponent(type);
     const isDateOnly = isDateOnlyComponent(type);
     const notificationsEnabled = selectedVehicle.notify_flags?.[type] ?? true;
@@ -65,7 +66,7 @@ export function ReplacementGroup({
                 >
                     <polygon points="8 5 19 12 8 19 8 5" />
                 </svg>
-                <span>{statusStyle.icon}</span>
+                <span className="shrink-0"><StatusIcon size={18} weight="fill" /></span>
                 <span className="text-label-lg flex-1">{componentName || type}</span>
                 <button
                     onClick={(event) => {
@@ -75,7 +76,7 @@ export function ReplacementGroup({
                     className="text-label-lg hover:opacity-70 transition-opacity"
                     aria-label={notificationsEnabled ? 'Отключить уведомления' : 'Включить уведомления'}
                 >
-                    {notificationsEnabled ? '🔔' : '🔕'}
+                    {notificationsEnabled ? '' : ''}
                 </button>
                 <span className="text-label-sm opacity-70">
                     {items.length} {items.length === 1 ? 'замена' : 'замен'}

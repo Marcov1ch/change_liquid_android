@@ -29,7 +29,7 @@ export function PublicTireSetsSection({ tireSets }: Props) {
                         >
                             <div className="flex items-center justify-between gap-2 flex-wrap">
                                 <span className="text-label-lg text-surface-on">
-                                    {TIRE_SEASON_ICONS[tireSet.season]} {tireSet.name}
+                                    {(() => { const SeasonIcon = TIRE_SEASON_ICONS[tireSet.season]; return <SeasonIcon size={18} />; })()} {tireSet.name}
                                     {tireSet.is_installed && (
                                         <span className="ml-2 md3-badge bg-primary-container text-primary-on-container">
                                             установлены
@@ -37,7 +37,7 @@ export function PublicTireSetsSection({ tireSets }: Props) {
                                     )}
                                     {tireSet.is_installed && status && (
                                         <span className={`ml-2 md3-badge ${status.bgClass} ${status.textClass}`}>
-                                            {status.icon} {status.label}
+                                            {(() => { const StatusIcon = status.icon; return <StatusIcon size={15} weight="fill" />; })()} {status.label}
                                         </span>
                                     )}
                                 </span>
@@ -48,14 +48,14 @@ export function PublicTireSetsSection({ tireSets }: Props) {
                             <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-body-sm text-outline">
                                 <span>{TIRE_SEASON_LABELS[tireSet.season]}</span>
                                 {tireSet.installed_date && (
-                                    <span>📅 Установлены: {tireSet.installed_date}</span>
+                                    <span> Установлены: {tireSet.installed_date}</span>
                                 )}
                                 {tireSet.next_change_date && (
-                                    <span>📅 Следующая смена: {tireSet.next_change_date}</span>
+                                    <span> Следующая смена: {tireSet.next_change_date}</span>
                                 )}
                                 {tireSet.purchase_price != null && (
                                     <span>
-                                        🧾 Покупка: {formatMoney(tireSet.purchase_price)}
+                                         Покупка: {formatMoney(tireSet.purchase_price)}
                                         {tireSet.purchase_date ? ` · ${tireSet.purchase_date}` : ''}
                                     </span>
                                 )}

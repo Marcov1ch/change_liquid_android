@@ -1,3 +1,4 @@
+import { X } from '@phosphor-icons/react';
 import { Spoiler } from './Spoiler';
 import type { RimSize, TireSize } from '../types';
 
@@ -6,6 +7,7 @@ interface Props {
     tires: TireSize[];
     onRimsChange: (rims: RimSize[]) => void;
     onTiresChange: (tires: TireSize[]) => void;
+    collapsible?: boolean;
 }
 
 const emptyRim = (): RimSize => ({
@@ -23,7 +25,7 @@ function numberValue(v: number | null | undefined): string {
     return v == null || Number.isNaN(v) ? '' : String(v);
 }
 
-export function VehicleSizesFields({ rims, tires, onRimsChange, onTiresChange }: Props) {
+export function VehicleSizesFields({ rims, tires, onRimsChange, onTiresChange, collapsible = true }: Props) {
     const updateRim = (index: number, patch: Partial<RimSize>) => {
         onRimsChange(rims.map((r, i) => (i === index ? { ...r, ...patch } : r)));
     };
@@ -51,8 +53,7 @@ export function VehicleSizesFields({ rims, tires, onRimsChange, onTiresChange }:
         />
     );
 
-    return (
-        <Spoiler title="Шины и диски">
+    const content = (
             <div className="flex flex-col gap-4 pt-3">
                 <div>
                     <h5 className="text-label-lg text-surface-on mb-2">Диски</h5>
@@ -154,7 +155,7 @@ export function VehicleSizesFields({ rims, tires, onRimsChange, onTiresChange }:
                                                 className="md3-btn-text !py-2 !px-2 text-label-sm !text-error shrink-0"
                                                 aria-label="Удалить размер"
                                             >
-                                                ✕
+                                                <X size={14} />
                                             </button>
                                         </div>
                                     </div>
@@ -171,6 +172,7 @@ export function VehicleSizesFields({ rims, tires, onRimsChange, onTiresChange }:
                     </button>
                 </div>
             </div>
-        </Spoiler>
     );
+
+    return collapsible ? <Spoiler title="Шины и диски">{content}</Spoiler> : content;
 }

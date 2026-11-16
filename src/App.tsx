@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { HomePage } from './pages/HomePage'
+import { GaragePage } from './pages/GaragePage'
+import { VehiclePage } from './pages/VehiclePage'
+import { StatisticsPage } from './pages/StatisticsPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ProfilePage } from './pages/ProfilePage'
@@ -8,6 +10,7 @@ import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { VerifyEmailPage } from './pages/VerifyEmailPage'
 import { PublicVehiclePage } from './pages/PublicVehiclePage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { TrackingOverlay } from './components/TrackingOverlay'
 
 function App() {
     return (
@@ -23,7 +26,23 @@ function App() {
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <HomePage />
+                            <GaragePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/vehicle/:id/:section?"
+                    element={
+                        <ProtectedRoute>
+                            <VehiclePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/stats"
+                    element={
+                        <ProtectedRoute>
+                            <StatisticsPage />
                         </ProtectedRoute>
                     }
                 />
@@ -37,6 +56,7 @@ function App() {
                 />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <TrackingOverlay />
         </BrowserRouter>
     )
 }

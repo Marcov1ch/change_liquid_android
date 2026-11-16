@@ -25,7 +25,7 @@ export function PublicOtherExpensesSection({ expenses }: Props) {
                                     {expense.name}
                                 </p>
                                 <p className="text-body-sm text-outline m-0">
-                                    📅 {expense.expense_date}
+                                     {expense.expense_date}
                                 </p>
                             </div>
                             <span className="text-title-sm text-surface-on shrink-0">

@@ -22,14 +22,14 @@ export function PublicFuelRecordsSection({ records }: Props) {
                         >
                             <div className="min-w-0">
                                 <p className="text-label-lg text-surface-on m-0">
-                                    📅 {record.fuel_date}
+                                     {record.fuel_date}
                                 </p>
                                 <p className="text-body-sm text-outline m-0">
-                                    📍 {record.km_at_fuel.toLocaleString()} км · ⛽{' '}
+                                     {record.km_at_fuel.toLocaleString()} км · {' '}
                                     {record.liters.toLocaleString(undefined, { maximumFractionDigits: 3 })} л
                                 </p>
                                 <p className="text-body-sm text-outline m-0">
-                                    📊 Расход:{' '}
+                                     Расход:{' '}
                                     {record.consumption_l_per_100km == null
                                         ? '—'
                                         : `${record.consumption_l_per_100km.toLocaleString(undefined, { maximumFractionDigits: 2 })} л/100 км`}

@@ -21,7 +21,7 @@ export function TireSetSwitchSection({ tireSets, installing, onInstall }: Props)
                         disabled={installing}
                         className="md3-btn-tonal disabled:opacity-60"
                     >
-                        {TIRE_SEASON_ICONS[tireSet.season]} {tireSet.name}
+                        {(() => { const SeasonIcon = TIRE_SEASON_ICONS[tireSet.season]; return <SeasonIcon size={18} />; })()} {tireSet.name}
                     </button>
                 ))}
             </div>

@@ -61,7 +61,7 @@ function PublicReplacementRow({
         <div className={`p-3 rounded-md3-sm border-l-4 ${style.border} bg-surface`}>
             <div className="flex items-center justify-between gap-2 flex-wrap">
                 <span className="text-label-lg text-surface-on">
-                    {isFirst && <span className="mr-1">{style.icon}</span>}
+                    {isFirst && (() => { const Icon = style.icon; return <span className="mr-1 inline-flex align-middle"><Icon size={16} weight="fill" /></span>; })()}
                     {replacement.component_name}
                 </span>
                 {isFirst && (
@@ -71,27 +71,27 @@ function PublicReplacementRow({
                 )}
             </div>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-body-sm text-outline">
-                <span>📅 {replacement.replacement_date}</span>
+                <span> {replacement.replacement_date}</span>
                 {isDateOnly ? (
                     <>
                         <span>
-                            🧾 {isParking ? 'Аренда' : 'Страховка'}:{' '}
+                             {isParking ? 'Аренда' : 'Страховка'}:{' '}
                             {formatMoney(replacement.component_price)}
                         </span>
                         {replacement.next_change_date && (
-                            <span>📅 До: {replacement.next_change_date}</span>
+                            <span> До: {replacement.next_change_date}</span>
                         )}
                     </>
                 ) : (
                     <>
-                        <span>📍 {replacement.km_at_replacement.toLocaleString()} км</span>
+                        <span> {replacement.km_at_replacement.toLocaleString()} км</span>
                         {replacement.component_type === 'tire_change' && replacement.km_traveled != null && (
-                            <span>🛣 Пройдено: {replacement.km_traveled.toLocaleString()} км</span>
+                            <span> Пройдено: {replacement.km_traveled.toLocaleString()} км</span>
                         )}
-                        <span>🧾 {formatMoney(replacement.component_price)}</span>
-                        <span>🔧 {formatMoney(replacement.work_price)}</span>
+                        <span> {formatMoney(replacement.component_price)}</span>
+                        <span> {formatMoney(replacement.work_price)}</span>
                         {replacement.next_change_date && (
-                            <span>📅 До: {replacement.next_change_date}</span>
+                            <span> До: {replacement.next_change_date}</span>
                         )}
                     </>
                 )}

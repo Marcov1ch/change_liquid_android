@@ -29,7 +29,7 @@ export function TireSetList({ tireSets, onEdit, onDelete }: Props) {
                                     className="text-label-lg text-surface-on m-0 truncate"
                                     title={tireSet.name}
                                 >
-                                    {TIRE_SEASON_ICONS[tireSet.season]} {tireSet.name}
+                                    {(() => { const SeasonIcon = TIRE_SEASON_ICONS[tireSet.season]; return <SeasonIcon size={18} />; })()} {tireSet.name}
                                 </p>
                                 {tireSet.is_installed && (
                                     <span className="md3-badge bg-primary-container text-primary-on-container shrink-0">

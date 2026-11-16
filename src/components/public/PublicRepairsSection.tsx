@@ -10,7 +10,7 @@ export function PublicRepairsSection({ repairs, componentNames }: Props) {
     const { formatMoney } = useCurrency();
     return (
         <div className="md3-card p-6">
-            <h2 className="text-title-md text-surface-on mb-4">Ремонт или обслуживание</h2>
+            <h2 className="text-title-md text-surface-on mb-4">Ремонт</h2>
 
             {repairs.length === 0 ? (
                 <p className="text-body-md text-outline">Ремонтов пока нет.</p>
@@ -23,17 +23,17 @@ export function PublicRepairsSection({ repairs, componentNames }: Props) {
                         >
                             <div className="flex items-center justify-between gap-3 flex-wrap">
                                 <span className="text-label-lg text-surface-on">
-                                    📅 {repair.repair_date}
+                                     {repair.repair_date}
                                 </span>
                                 <span className="text-title-sm text-surface-on">
                                     {formatMoney(repair.work_cost + repair.parts_cost)}
                                 </span>
                             </div>
                             <p className="text-body-sm text-outline m-0 mt-1">
-                                📍 {repair.km_at_repair.toLocaleString()} км
+                                 {repair.km_at_repair.toLocaleString()} км
                             </p>
                             <p className="text-body-sm text-outline m-0">
-                                🔧 Работы: {formatMoney(repair.work_cost)} · 🧾 Запчасти:{' '}
+                                 Работы: {formatMoney(repair.work_cost)} ·  Запчасти:{' '}
                                 {formatMoney(repair.parts_cost)}
                             </p>
                             {repair.description && (

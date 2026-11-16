@@ -26,17 +26,17 @@ export function ReplacementMeta({
 
     return (
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-body-sm text-outline">
-            <span>📅 {replacement.replacement_date}</span>
+            <span> {replacement.replacement_date}</span>
             {isDateOnly ? (
                 <>
                     {replacement.component_price != null && replacement.component_price > 0 && (
                         <span>
-                            🧾 {isParking ? 'Аренда' : 'Страховка'}:{' '}
+                             {isParking ? 'Аренда' : 'Страховка'}:{' '}
                             {formatMoney(replacement.component_price)}
                         </span>
                     )}
                     {replacement.next_change_date && (
-                        <span>📅 До: {replacement.next_change_date}</span>
+                        <span> До: {replacement.next_change_date}</span>
                     )}
                     {replacement.days_remaining != null && (
                         <span className={warningClass}>
@@ -46,22 +46,22 @@ export function ReplacementMeta({
                 </>
             ) : (
                 <>
-                    <span>📍 {replacement.km_at_replacement.toLocaleString()} км</span>
-                    <span>🛣 Пройдено: {kmTraveled.toLocaleString()} км</span>
+                    <span> {replacement.km_at_replacement.toLocaleString()} км</span>
+                    <span> Пройдено: {kmTraveled.toLocaleString()} км</span>
                     {replacement.component_price != null && replacement.component_price > 0 && (
                         <span>
-                            🧾 {isTire ? 'Шины' : 'Цена'}:{' '}
+                             {isTire ? 'Шины' : 'Цена'}:{' '}
                             {formatMoney(replacement.component_price)}
                         </span>
                     )}
                     {replacement.work_price != null && replacement.work_price > 0 && (
-                        <span>🔧 Работы: {formatMoney(replacement.work_price)}</span>
+                        <span> Работы: {formatMoney(replacement.work_price)}</span>
                     )}
                     {replacement.next_replacement_km != null && !isTire && (
                         <span>⏱ Следующая: {replacement.next_replacement_km.toLocaleString()} км</span>
                     )}
                     {replacement.next_change_date && (
-                        <span>📅 До: {replacement.next_change_date}</span>
+                        <span> До: {replacement.next_change_date}</span>
                     )}
                     {isTire && replacement.days_remaining != null && (
                         <span className={warningClass}>

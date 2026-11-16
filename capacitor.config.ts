@@ -13,6 +13,9 @@ const config: CapacitorConfig = {
       insetsHandling: 'css',
       initialViewportFitValueHint: 'cover',
     },
+    App: {
+      disableBackButtonHandler: true,
+    },
   },
 };
 

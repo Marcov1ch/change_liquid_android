@@ -4,10 +4,85 @@
 
 @layer base {
   :root {
+    --bg: 244 246 248;
+    --surface: 255 255 255;
+    --surface-2: 237 240 244;
+    --surface-3: 226 231 237;
+    --on-surface: 18 23 29;
+    --on-surface-variant: 74 84 95;
+    --outline: 122 133 145;
+    --outline-variant: 213 219 226;
+    --primary: 26 109 255;
+    --on-primary: 255 255 255;
+    --primary-container: 220 230 255;
+    --on-primary-container: 0 26 65;
+    --secondary: 87 94 113;
+    --on-secondary: 255 255 255;
+    --secondary-container: 219 226 249;
+    --on-secondary-container: 20 27 44;
+    --tertiary: 114 85 114;
+    --on-tertiary: 255 255 255;
+    --tertiary-container: 253 216 252;
+    --on-tertiary-container: 41 19 40;
+    --error: 179 38 30;
+    --on-error: 255 255 255;
+    --error-container: 255 218 214;
+    --on-error-container: 65 0 2;
+    --attention: 178 106 0;
+    --good-bg: 228 246 233;
+    --good-fg: 27 127 59;
+    --warning-bg: 255 243 214;
+    --warning-fg: 138 97 0;
+    --critical-bg: 255 233 217;
+    --critical-fg: 154 75 0;
+    --overdue-bg: 255 218 214;
+    --overdue-fg: 179 38 30;
+    --unknown-bg: 237 240 244;
+    --unknown-fg: 74 84 95;
     --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
     --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
     --sal: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
     --sar: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --bg: 14 18 22;
+    --surface: 22 28 34;
+    --surface-2: 30 37 45;
+    --surface-3: 40 49 58;
+    --on-surface: 231 236 241;
+    --on-surface-variant: 170 180 191;
+    --outline: 138 149 161;
+    --outline-variant: 54 65 76;
+    --primary: 168 195 255;
+    --on-primary: 0 46 110;
+    --primary-container: 18 58 120;
+    --on-primary-container: 220 230 255;
+    --secondary: 190 198 220;
+    --on-secondary: 40 48 64;
+    --secondary-container: 50 58 76;
+    --on-secondary-container: 219 226 249;
+    --tertiary: 224 188 223;
+    --on-tertiary: 67 41 67;
+    --tertiary-container: 90 62 90;
+    --on-tertiary-container: 253 216 252;
+    --error: 255 180 171;
+    --on-error: 105 0 5;
+    --error-container: 59 18 16;
+    --on-error-container: 255 218 214;
+    --attention: 242 198 109;
+    --good-bg: 18 48 31;
+    --good-fg: 127 215 154;
+    --warning-bg: 51 39 10;
+    --warning-fg: 242 198 109;
+    --critical-bg: 58 34 16;
+    --critical-fg: 255 178 122;
+    --overdue-bg: 59 18 16;
+    --overdue-fg: 255 180 171;
+    --unknown-bg: 30 37 45;
+    --unknown-fg: 170 180 191;
+    color-scheme: dark;
   }
 
   *,
@@ -32,28 +107,28 @@
     margin: 0;
     padding-top: var(--sat);
     padding-bottom: var(--sab);
-    background-color: #D8E2FF;
-    color: #1A1C1E;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--on-surface));
   }
 
   :focus-visible {
-    outline: 2px solid #1A6DFF;
+    outline: 2px solid rgb(var(--primary));
     outline-offset: 2px;
-    border-radius: 8px;
+    border-radius: 12px;
   }
 
   ::selection {
-    background-color: #D8E2FF;
-    color: #001A41;
+    background-color: rgb(var(--primary-container));
+    color: rgb(var(--on-primary-container));
   }
 }
 
 @layer components {
   .md3-field {
-    @apply w-full px-4 py-3 bg-surface border-2 border-outline-variant rounded-md3-sm
-           text-body-lg text-surface-on placeholder:text-outline
+    @apply w-full px-4 py-3 bg-surface border border-outline-variant rounded-md3-sm
+           text-body-md text-surface-on placeholder:text-outline
            transition-all duration-200 ease-out
-           focus:border-primary focus:outline-none focus:ring-0;
+           focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
   }
 
   .md3-field-error {
@@ -68,7 +143,7 @@
   }
 
   .md3-btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px]
            rounded-md3-full text-label-lg font-medium
            transition-all duration-200 ease-out
            cursor-pointer select-none
@@ -76,64 +151,58 @@
   }
 
   .md3-btn-primary {
-    @apply md3-btn bg-primary text-primary-on
-           shadow-md3-1 hover:shadow-md3-2
-           hover:brightness-110 active:brightness-90;
+    @apply md3-btn bg-primary text-primary-on shadow-md3-1
+           hover:brightness-105 active:brightness-95;
   }
 
   .md3-btn-secondary {
     @apply md3-btn bg-secondary-container text-secondary-on-container
-           hover:bg-[#CDD4EC] active:bg-[#C2C9E1];
+           active:brightness-95;
   }
 
   .md3-btn-text {
     @apply md3-btn bg-transparent text-primary
-           hover:bg-[rgba(26,109,255,0.08)] active:bg-[rgba(26,109,255,0.12)];
+           active:bg-primary/10;
   }
 
   .md3-btn-tonal {
     @apply md3-btn bg-primary-container text-primary-on-container
-           hover:bg-[#C8D4F5] active:bg-[#B8C7EE];
+           active:brightness-95;
   }
 
   .md3-btn-danger {
     @apply md3-btn bg-error text-error-on
-           shadow-md3-1 hover:shadow-md3-2
-           hover:brightness-110 active:brightness-90;
+           shadow-md3-1 active:brightness-95;
   }
 
   .md3-card {
-    @apply bg-surface rounded-md3-md shadow-md3-1
-           transition-shadow duration-200 ease-out
-           hover:shadow-md3-2;
+    @apply bg-surface rounded-md3-md border border-outline-variant
+           transition-shadow duration-200 ease-out;
   }
 
   .md3-card-interactive {
     @apply md3-card cursor-pointer
-           hover:bg-surface-variant/30
-           active:bg-surface-variant/50;
+           active:bg-surface-2;
   }
 
   .md3-chip {
-    @apply inline-flex items-center gap-2 px-4 py-2
+    @apply inline-flex items-center gap-2 px-4 py-2 min-h-[40px]
            rounded-md3-full text-label-lg
-           bg-surface-variant text-surface-on-variant
+           bg-surface-2 text-surface-on-variant
            transition-all duration-200 ease-out
-           cursor-pointer select-none
-           hover:bg-[#D2D4DE] active:bg-[#C6C8D2];
+           cursor-pointer select-none;
   }
 
   .md3-chip-filled {
-    @apply md3-chip bg-primary-container text-primary-on-container
-           hover:bg-[#C8D4F5] active:bg-[#B8C7EE];
+    @apply md3-chip bg-primary-container text-primary-on-container;
   }
 
   .md3-elevated {
-    @apply bg-surface rounded-md3-md shadow-md3-2;
+    @apply bg-surface rounded-md3-md shadow-md3-2 border border-outline-variant;
   }
 
   .md3-badge {
-    @apply inline-flex items-center justify-center px-2 py-0.5
+    @apply inline-flex items-center justify-center px-2 py-0.5 gap-1
            rounded-md3-full text-label-sm font-medium;
   }
 
@@ -148,5 +217,17 @@
   .app-shell {
     height: calc(100vh - var(--sat) - var(--sab));
     height: calc(100dvh - var(--sat) - var(--sab));
+  }
+
+  .sheet-safe {
+    padding-bottom: calc(var(--sab) + 12px);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

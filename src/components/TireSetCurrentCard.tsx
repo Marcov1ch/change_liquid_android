@@ -28,11 +28,11 @@ export function TireSetCurrentCard({ current }: Props) {
                 <p className="text-body-sm m-0 opacity-80">Сейчас установлены</p>
                 <div className="flex items-center justify-between gap-3 flex-wrap mt-1">
                     <h3 className="text-title-md m-0">
-                        {TIRE_SEASON_ICONS[current.season]} {current.name}
+                        {(() => { const SeasonIcon = TIRE_SEASON_ICONS[current.season]; return <SeasonIcon size={20} />; })()} {current.name}
                     </h3>
                     <div className="flex items-center gap-2 flex-wrap">
                         <span className={`md3-badge ${status.bgClass} ${status.textClass}`}>
-                            {status.icon} {status.label}
+                            {(() => { const StatusIcon = status.icon; return <StatusIcon size={15} weight="fill" />; })()} {status.label}
                         </span>
                         <span className="md3-badge bg-surface text-surface-on">
                             {formatKm(current.total_km)}
@@ -45,7 +45,7 @@ export function TireSetCurrentCard({ current }: Props) {
                 </p>
                 {current.next_change_date && (
                     <p className="text-body-sm m-0 mt-1 opacity-80">
-                        📅 Следующая смена: {current.next_change_date}
+                         Следующая смена: {current.next_change_date}
                     </p>
                 )}
                 {current.status && (
@@ -58,7 +58,7 @@ export function TireSetCurrentCard({ current }: Props) {
             {!current.next_change_date && (
                 <div className="p-3 rounded-md3-sm bg-surface-variant/50 text-surface-on-variant">
                     <p className="text-body-sm m-0">
-                        ⚪ Дата следующей смены не задана. Укажите её в редактировании комплекта,
+                         Дата следующей смены не задана. Укажите её в редактировании комплекта,
                         чтобы получать напоминания и видеть статус.
                     </p>
                 </div>

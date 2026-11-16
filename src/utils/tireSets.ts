@@ -1,3 +1,5 @@
+import { CheckCircle, Clock, CloudSun, MinusCircle, Snowflake, Sun, Warning, XCircle } from '@phosphor-icons/react';
+import type { IconComponent } from '../theme/icon';
 import type { Replacement, TireSeason, TireSet } from '../types';
 
 export const TIRE_SEASON_LABELS: Record<TireSeason, string> = {
@@ -6,15 +8,15 @@ export const TIRE_SEASON_LABELS: Record<TireSeason, string> = {
     all_season: 'Всесезон',
 };
 
-export const TIRE_SEASON_ICONS: Record<TireSeason, string> = {
-    summer: '☀️',
-    winter: '❄️',
-    all_season: '🌤️',
+export const TIRE_SEASON_ICONS: Record<TireSeason, IconComponent> = {
+    summer: Sun,
+    winter: Snowflake,
+    all_season: CloudSun,
 };
 
 export interface TireStatusMeta {
     label: string;
-    icon: string;
+    icon: IconComponent;
     dotClass: string;
     bgClass: string;
     textClass: string;
@@ -24,7 +26,7 @@ export interface TireStatusMeta {
 export const TIRE_STATUS_META: Record<string, TireStatusMeta> = {
     good: {
         label: 'В порядке',
-        icon: '🟢',
+        icon: CheckCircle,
         dotClass: 'bg-[#28A745]',
         bgClass: 'bg-[#E6F7E6]',
         textClass: 'text-[#1B5E1B]',
@@ -32,7 +34,7 @@ export const TIRE_STATUS_META: Record<string, TireStatusMeta> = {
     },
     warning: {
         label: 'Скоро замена',
-        icon: '🟡',
+        icon: Clock,
         dotClass: 'bg-[#FFC107]',
         bgClass: 'bg-[#FFF8E1]',
         textClass: 'text-[#7A6100]',
@@ -40,7 +42,7 @@ export const TIRE_STATUS_META: Record<string, TireStatusMeta> = {
     },
     critical: {
         label: 'Требует внимания',
-        icon: '🟠',
+        icon: Warning,
         dotClass: 'bg-[#E06900]',
         bgClass: 'bg-[#FFF0E6]',
         textClass: 'text-[#7A2D00]',
@@ -48,7 +50,7 @@ export const TIRE_STATUS_META: Record<string, TireStatusMeta> = {
     },
     overdue: {
         label: 'Замена просрочена',
-        icon: '🔴',
+        icon: XCircle,
         dotClass: 'bg-error',
         bgClass: 'bg-error-container',
         textClass: 'text-error-on-container',
@@ -56,7 +58,7 @@ export const TIRE_STATUS_META: Record<string, TireStatusMeta> = {
     },
     unknown: {
         label: 'Нет данных',
-        icon: '⚪',
+        icon: MinusCircle,
         dotClass: 'bg-outline',
         bgClass: 'bg-surface-variant/50',
         textClass: 'text-surface-on-variant',

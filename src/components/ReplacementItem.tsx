@@ -1,3 +1,4 @@
+import type { IconComponent } from '../theme/icon';
 import type { Repair, Replacement } from '../types';
 import {
     getReplacementDateReminder,
@@ -21,7 +22,7 @@ export interface ReplacementEditForm {
 interface Props {
     replacement: Replacement;
     isFirst: boolean;
-    itemStyle: { bg: string; text: string; border: string; icon: string };
+    itemStyle: { bg: string; text: string; border: string; icon: IconComponent };
     editing: boolean;
     editForm: ReplacementEditForm;
     today: string;
@@ -87,7 +88,7 @@ export function ReplacementItem({
             ) : (
                 <>
                     <div className="flex items-center gap-2 min-w-0">
-                        {isFirst && <span className="text-label-md">{itemStyle.icon}</span>}
+                        {isFirst && (() => { const Icon = itemStyle.icon; return <span className="text-label-md"><Icon size={16} weight="fill" /></span>; })()}
                         <span className="text-label-lg text-surface-on">{replacement.component_name}</span>
                         {isFirst && (
                             <span className="md3-badge bg-primary-container text-primary-on-container">

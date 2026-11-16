@@ -26,7 +26,7 @@ export function TireHistoryList({ events, protectedEventId, onDelete }: Props) {
                                 className="text-label-lg text-surface-on m-0 min-w-0 truncate"
                                 title={event.component_name}
                             >
-                                {event.tire_event_type === 'purchase' ? '🧾' : '🛞'}{' '}
+                                {event.tire_event_type === 'purchase' ? '' : ''}{' '}
                                 {formatTireEventLabel(event)} · {event.component_name}
                             </p>
                             <button
@@ -46,15 +46,15 @@ export function TireHistoryList({ events, protectedEventId, onDelete }: Props) {
                             </button>
                         </div>
                         <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-body-sm text-outline">
-                            <span>📅 {event.replacement_date}</span>
-                            <span>📍 {event.km_at_replacement.toLocaleString()} км</span>
+                            <span> {event.replacement_date}</span>
+                            <span> {event.km_at_replacement.toLocaleString()} км</span>
                             {event.component_price != null && event.component_price > 0 && (
-                                <span>🧾 {formatMoney(event.component_price)}</span>
+                                <span> {formatMoney(event.component_price)}</span>
                             )}
                             {event.work_price != null && event.work_price > 0 && (
-                                <span>🔧 Работа: {formatMoney(event.work_price)}</span>
+                                <span> Работа: {formatMoney(event.work_price)}</span>
                             )}
-                            {event.next_change_date && <span>📅 До: {event.next_change_date}</span>}
+                            {event.next_change_date && <span> До: {event.next_change_date}</span>}
                         </div>
                     </div>
                 ))}

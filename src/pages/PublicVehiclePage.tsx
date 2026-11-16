@@ -86,7 +86,7 @@ export function PublicVehiclePage() {
 
                 {error && (
                     <div className="md3-card p-8 text-center">
-                        <div className="w-14 h-14 rounded-full bg-error-container flex items-center justify-center mx-auto mb-4 text-2xl">🔒</div>
+                        <div className="w-14 h-14 rounded-full bg-error-container flex items-center justify-center mx-auto mb-4 text-2xl"></div>
                         <h2 className="text-title-md text-surface-on mb-2">Ссылка недоступна</h2>
                         <p className="text-body-md text-outline">
                             {error instanceof Error ? error.message : 'Ссылка не найдена или отключена'}

@@ -6,6 +6,9 @@ import App from './App.tsx'
 import { AuthProvider } from './context/AuthContext'
 import { CurrencyProvider } from './context/CurrencyContext'
 import { ToastProvider } from './context/ToastContext'
+import { ThemeProvider } from './theme/ThemeProvider'
+import { BackButtonProvider } from './context/BackButtonProvider'
+import { TrackingProvider } from './context/TrackingProvider'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,13 +22,19 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <AuthProvider queryClient={queryClient}>
-                <CurrencyProvider>
-                    <ToastProvider>
-                        <App />
-                    </ToastProvider>
-                </CurrencyProvider>
-            </AuthProvider>
+            <ThemeProvider>
+                <AuthProvider queryClient={queryClient}>
+                    <CurrencyProvider>
+                        <ToastProvider>
+                            <BackButtonProvider>
+                                <TrackingProvider>
+                                    <App />
+                                </TrackingProvider>
+                            </BackButtonProvider>
+                        </ToastProvider>
+                    </CurrencyProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </QueryClientProvider>
     </StrictMode>,
 )

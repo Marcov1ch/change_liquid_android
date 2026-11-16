@@ -8,6 +8,7 @@ import { RepairForm } from './RepairForm';
 import { VehicleCardHeader } from './VehicleCardHeader';
 
 interface Props {
+  embedded?: boolean;
   repairs: Repair[];
   replacements: Replacement[];
   vehicleId: number | null;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function RepairList({
+  embedded = false,
   repairs,
   replacements,
   vehicleId,
@@ -31,7 +33,6 @@ export function RepairList({
   const {
     showForm,
     editing,
-    openCreateForm,
     openEditForm,
     closeForm,
     handleSubmit,
@@ -64,18 +65,20 @@ export function RepairList({
 
   return (
     <div className="md3-card overflow-hidden animate-fade-in">
-      <VehicleCardHeader
+      {!embedded && (
+<VehicleCardHeader
         vehicle={selectedVehicle}
-        title={`Ремонт или обслуживание: ${selectedVehicle.brand} ${selectedVehicle.model}`}
+        title={`Ремонт: ${selectedVehicle.brand} ${selectedVehicle.model}`}
         onClose={onClose}
         onShare={onShare}
       />
+      )}
 
       <div className="p-4">
         {sortedRepairs.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-10 text-center">
             <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center">
-              <span className="text-xl">🔧</span>
+              <span className="text-xl"></span>
             </div>
             <p className="text-title-sm text-surface-on mb-1">Нет ремонтов</p>
             <p className="text-body-md text-outline max-w-sm">
@@ -90,12 +93,12 @@ export function RepairList({
               <div key={repair.id} className="p-4 rounded-md3-sm bg-surface border border-outline-variant">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-label-lg text-surface-on m-0">📅 {repair.repair_date}</p>
+                    <p className="text-label-lg text-surface-on m-0"> {repair.repair_date}</p>
                     <p className="text-body-sm text-outline m-0">
-                      📍 {repair.km_at_repair.toLocaleString()} км
+                       {repair.km_at_repair.toLocaleString()} км
                     </p>
                     <p className="text-body-sm text-outline m-0">
-                      🔧 Работы: {formatMoney(repair.work_cost)} · 🧾 Запчасти: {formatMoney(repair.parts_cost)}
+                       Работы: {formatMoney(repair.work_cost)} ·  Запчасти: {formatMoney(repair.parts_cost)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -146,14 +149,6 @@ export function RepairList({
           </div>
         )}
 
-        <div className="mt-4">
-          <button onClick={openCreateForm} className="md3-btn-primary w-full">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Добавить ремонт
-          </button>
-        </div>
       </div>
 
       <Modal

@@ -7,6 +7,7 @@ import { OtherExpenseForm } from './OtherExpenseForm';
 import { VehicleCardHeader } from './VehicleCardHeader';
 
 interface Props {
+  embedded?: boolean;
   expenses: OtherExpense[];
   vehicleId: number | null;
   selectedVehicle: Vehicle | undefined;
@@ -15,12 +16,11 @@ interface Props {
   onExpensesUpdate: () => void;
 }
 
-export function OtherExpensesList({ expenses, vehicleId, selectedVehicle, onClose, onShare, onExpensesUpdate }: Props) {
+export function OtherExpensesList({ embedded = false, expenses, vehicleId, selectedVehicle, onClose, onShare, onExpensesUpdate }: Props) {
   const { formatMoney } = useCurrency();
   const {
     showForm,
     editing,
-    openCreateForm,
     openEditForm,
     closeForm,
     handleSubmit,
@@ -51,18 +51,20 @@ export function OtherExpensesList({ expenses, vehicleId, selectedVehicle, onClos
 
   return (
     <div className="md3-card overflow-hidden animate-fade-in">
-      <VehicleCardHeader
+      {!embedded && (
+<VehicleCardHeader
         vehicle={selectedVehicle}
         title={`Прочие траты: ${selectedVehicle.brand} ${selectedVehicle.model}`}
         onClose={onClose}
         onShare={onShare}
       />
+      )}
 
       <div className="p-4">
         {sortedExpenses.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-10 text-center">
             <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center">
-              <span className="text-xl">💸</span>
+              <span className="text-xl"></span>
             </div>
             <p className="text-title-sm text-surface-on mb-1">Нет прочих трат</p>
             <p className="text-body-md text-outline max-w-sm">
@@ -76,7 +78,7 @@ export function OtherExpensesList({ expenses, vehicleId, selectedVehicle, onClos
               <div key={expense.id} className="flex items-center justify-between gap-3 p-3 rounded-md3-sm bg-surface border border-outline-variant">
                 <div className="min-w-0">
                   <p className="text-label-lg text-surface-on m-0 truncate">{expense.name}</p>
-                  <p className="text-body-sm text-outline m-0">📅 {expense.expense_date}</p>
+                  <p className="text-body-sm text-outline m-0"> {expense.expense_date}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-title-sm text-surface-on">{formatMoney(expense.amount)}</span>
@@ -111,14 +113,6 @@ export function OtherExpensesList({ expenses, vehicleId, selectedVehicle, onClos
           </div>
         )}
 
-        <div className="mt-4">
-          <button onClick={openCreateForm} className="md3-btn-primary w-full">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Добавить трату
-          </button>
-        </div>
       </div>
 
       <Modal

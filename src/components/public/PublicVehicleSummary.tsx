@@ -34,7 +34,7 @@ export function PublicVehicleSummary({
                     </p>
                 </div>
                 <span className={`md3-badge ${statusStyle.bg} ${statusStyle.text}`}>
-                    {statusStyle.icon} {statusStyle.label}
+                    {(() => { const Icon = statusStyle.icon; return <Icon size={14} weight="fill" />; })()} {statusStyle.label}
                 </span>
             </div>
 
