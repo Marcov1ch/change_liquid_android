@@ -11,9 +11,14 @@ interface Props {
 
 export function Sheet({ isOpen, onClose, title, children, footer }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useBackHandler(() => {
-    onClose();
+    onCloseRef.current();
     return true;
   }, isOpen);
 
@@ -21,10 +26,12 @@ export function Sheet({ isOpen, onClose, title, children, footer }: Props) {
     if (!isOpen) return;
     const previous = document.activeElement as HTMLElement | null;
     document.body.style.overflow = 'hidden';
-    panelRef.current?.focus();
+    if (!panelRef.current?.contains(document.activeElement)) {
+      panelRef.current?.focus();
+    }
 
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') onCloseRef.current();
       if (event.key !== 'Tab' || !panelRef.current) return;
       const focusable = panelRef.current.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
@@ -47,7 +54,7 @@ export function Sheet({ isOpen, onClose, title, children, footer }: Props) {
       document.removeEventListener('keydown', onKey);
       previous?.focus?.();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

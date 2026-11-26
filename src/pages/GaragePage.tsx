@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
-import { Car, Drop } from '@phosphor-icons/react';
+import { Drop } from '@phosphor-icons/react';
 import { api } from '../api/client';
 import type { Vehicle } from '../types';
 import { AppShell } from '../components/shell/AppShell';
@@ -11,8 +11,10 @@ import { Fab } from '../components/shell/Fab';
 import { Sheet } from '../components/ui/Sheet';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
+import { EmptyGarageIllustration } from '../components/ui/EmptyGarageIllustration';
 import { Skeleton } from '../components/ui/Skeleton';
 import { VehicleCard } from '../components/vehicle/VehicleCard';
+import { PrimaryVehicleHero } from '../components/vehicle/PrimaryVehicleHero';
 import { VehicleActionsMenu } from '../components/vehicle/VehicleActionsMenu';
 import { ArchiveToggle } from '../components/vehicle/ArchiveToggle';
 import { VehicleForm } from '../components/VehicleForm';
@@ -22,6 +24,7 @@ import { useVehicleMutations } from '../hooks/useVehicleMutations'
 import { useTracking } from '../context/TrackingProvider';
 import { useAuth } from '../context/AuthContext';
 import { usePrimaryVehicle } from '../hooks/usePrimaryVehicle';
+import { useHorizontalSwipe } from '../hooks/useHorizontalSwipe';
 import { QuickAddSheet } from '../components/quickadd/QuickAddSheet';
 import { buildDueCandidates, pickNearestDue, type NearestDue } from '../utils/nearestDue';
 
@@ -43,6 +46,10 @@ export function GaragePage() {
   const [kmDraft, setKmDraft] = useState('');
   const [confirmation, setConfirmation] = useState<Confirmation>(null);
 
+  const swipeHandlers = useHorizontalSwipe({
+    onSwipe: () => setShowArchived(value => !value),
+  });
+
   const dueQueries = useQueries({
     queries: active.map(vehicle => ({
       queryKey: ['replacements', vehicle.id],
@@ -60,7 +67,8 @@ export function GaragePage() {
     return map;
   }, [active, dueQueries]);
 
-  const list = showArchived ? archived : active;
+  const secondary = showArchived ? archived : active.filter(vehicle => vehicle.id !== primary?.id);
+  const emptyView = showArchived ? archived.length === 0 : active.length === 0;
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: ['vehicles'] });
     if (primary) queryClient.invalidateQueries({ queryKey: ['replacements', primary.id] });
@@ -91,11 +99,28 @@ export function GaragePage() {
     setKmDraft('');
   };
 
+  const renderVehicleMenu = (vehicle: Vehicle) => (
+    <VehicleActionsMenu
+      vehicle={vehicle}
+      onEdit={() => setEditing(vehicle)}
+      onStatistics={() => navigate(`/stats?vehicle=${vehicle.id}`)}
+      onUpdateKm={() => {
+        setKmVehicle(vehicle);
+        setKmDraft(String(vehicle.current_km));
+      }}
+      onStartTrip={() => void tracking.start(vehicle.id)}
+      onArchive={() => setConfirmation({ kind: 'archive', vehicle })}
+      onRestore={() => void mutations.restore(vehicle.id).then(refreshUser)}
+      onHardDelete={() => setConfirmation({ kind: 'hardDelete', vehicle })}
+    />
+  );
+
   return (
     <AppShell
       fab={!showArchived && primary
         ? <Fab label="Добавить запись" onClick={() => setQuickAddOpen(true)} />
         : undefined}
+      mainHandlers={swipeHandlers}
     >
       <AppBar
         leading={(
@@ -108,59 +133,62 @@ export function GaragePage() {
         )}
       />
 
-      <ArchiveToggle
-        showArchived={showArchived}
-        onShowArchivedChange={setShowArchived}
-        activeCount={active.length}
-        archivedCount={archived.length}
-      />
-
-      {isLoading ? (
-        <div className="flex flex-col gap-3">
-          <Skeleton className="h-24" />
-          <Skeleton className="h-24" />
-          <Skeleton className="h-24" />
-        </div>
-      ) : list.length === 0 ? (
-        <EmptyState
-          icon={Car}
-          title={showArchived ? 'Архив пуст' : 'Нет автомобилей'}
-          description={showArchived ? 'Сюда попадают машины, убранные из активных.' : 'Добавьте первый автомобиль, чтобы начать вести историю.'}
-          action={!showArchived ? (
-            <button type="button" onClick={() => setShowAddForm(true)} className="md3-btn-primary mt-1">
-              Добавить автомобиль
-            </button>
-          ) : undefined}
-        />
-      ) : (
-        <div className="flex flex-col gap-3">
-          {list.map(vehicle => (
-            <VehicleCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              archived={showArchived}
-              primary={isPrimary(vehicle)}
-              due={dueByVehicle.get(vehicle.id) ?? null}
-              onOpen={() => navigate(`/vehicle/${vehicle.id}`)}
-              menu={(
-                <VehicleActionsMenu
-                  vehicle={vehicle}
-                  onEdit={() => setEditing(vehicle)}
-                  onStatistics={() => navigate(`/stats?vehicle=${vehicle.id}`)}
-                  onUpdateKm={() => {
-                    setKmVehicle(vehicle);
-                    setKmDraft(String(vehicle.current_km));
-                  }}
-                  onStartTrip={() => void tracking.start(vehicle.id)}
-                  onArchive={() => setConfirmation({ kind: 'archive', vehicle })}
-                  onRestore={() => void mutations.restore(vehicle.id).then(refreshUser)}
-                  onHardDelete={() => setConfirmation({ kind: 'hardDelete', vehicle })}
-                />
-              )}
+      <div
+        key={showArchived ? 'archived' : 'active'}
+        className="animate-fade-in"
+      >
+        {!showArchived && primary && (
+          <div className="mb-3">
+            <PrimaryVehicleHero
+              vehicle={primary}
+              nearest={dueByVehicle.get(primary.id) ?? null}
+              primary
+              onOpen={() => navigate(`/vehicle/${primary.id}`)}
+              menu={renderVehicleMenu(primary)}
             />
-          ))}
-        </div>
-      )}
+          </div>
+        )}
+
+        <ArchiveToggle
+          showArchived={showArchived}
+          onShowArchivedChange={setShowArchived}
+          activeCount={active.length}
+          archivedCount={archived.length}
+        />
+
+        {isLoading ? (
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-24" />
+            <Skeleton className="h-24" />
+            <Skeleton className="h-24" />
+          </div>
+        ) : emptyView ? (
+          <EmptyState
+            illustration={<EmptyGarageIllustration className="h-28 w-40" />}
+            title={showArchived ? 'Архив пуст' : 'Нет автомобилей'}
+            description={showArchived ? 'Сюда попадают машины, убранные из активных.' : 'Добавьте первый автомобиль, чтобы начать вести историю.'}
+            action={!showArchived ? (
+              <button type="button" onClick={() => setShowAddForm(true)} className="md3-btn-primary mt-1">
+                Добавить автомобиль
+              </button>
+            ) : undefined}
+          />
+        ) : (
+          <div className="flex flex-col gap-3">
+            {secondary.map(vehicle => (
+              <VehicleCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                archived={showArchived}
+                primary={isPrimary(vehicle)}
+                due={dueByVehicle.get(vehicle.id) ?? null}
+                onOpen={() => navigate(`/vehicle/${vehicle.id}`)}
+                menu={renderVehicleMenu(vehicle)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       <Sheet isOpen={showAddForm} onClose={() => setShowAddForm(false)} title="Новый автомобиль">
         <VehicleForm

@@ -13,9 +13,10 @@ export interface MenuItem {
 interface Props {
   items: MenuItem[];
   label?: string;
+  triggerClassName?: string;
 }
 
-export function Menu({ items, label = 'Ещё' }: Props) {
+export function Menu({ items, label = 'Ещё', triggerClassName }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -41,11 +42,11 @@ export function Menu({ items, label = 'Ещё' }: Props) {
   }, [open]);
 
   return (
-    <div className="relative" ref={rootRef}>
+    <div className="relative" ref={rootRef} onClick={(event) => event.stopPropagation()}>
       <button
         type="button"
         onClick={() => setOpen(prev => !prev)}
-        className="flex items-center justify-center w-10 h-10 rounded-md3-full text-surface-on-variant active:bg-surface-2"
+        className={`flex items-center justify-center w-10 h-10 rounded-md3-full ${triggerClassName ?? 'text-surface-on-variant active:bg-surface-2'}`}
         aria-label={label}
         aria-expanded={open}
       >
