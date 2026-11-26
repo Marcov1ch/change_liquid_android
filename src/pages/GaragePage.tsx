@@ -159,16 +159,6 @@ export function GaragePage() {
               )}
             />
           ))}
-
-          {!showArchived && (
-            <button
-              type="button"
-              onClick={() => setShowAddForm(true)}
-              className="md3-btn-tonal w-full mt-1"
-            >
-              Добавить автомобиль
-            </button>
-          )}
         </div>
       )}
 
