@@ -14,9 +14,18 @@ interface Props {
 const RING_RADIUS = 26;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
+const statusGradient: Record<string, string> = {
+  good: 'from-[#1A6DFF] to-[#4C8DFF]',
+  warning: 'from-[#92400E] to-[#D97706]',
+  critical: 'from-[#9A3412] to-[#EA580C]',
+  overdue: 'from-[#991B1B] to-[#DC2626]',
+  unknown: 'from-[#475569] to-[#64748B]',
+};
+
 export function PrimaryVehicleHero({ vehicle, nearest, primary = false, onOpen, menu }: Props) {
   const progress = nearest ? Math.min(100, Math.max(4, Math.round((1 - nearest.ratio) * 100))) : 0;
   const dash = (progress / 100) * RING_CIRCUMFERENCE;
+  const status = vehicle.vehicle_status || 'unknown';
 
   return (
     <div
@@ -27,7 +36,7 @@ export function PrimaryVehicleHero({ vehicle, nearest, primary = false, onOpen, 
         if (event.target !== event.currentTarget) return;
         if (event.key === 'Enter' || event.key === ' ') onOpen();
       } : undefined}
-      className="relative rounded-md3-md bg-gradient-to-br from-[#1A6DFF] to-[#4C8DFF] p-4 text-white shadow-md3-2"
+      className={`relative rounded-md3-md bg-gradient-to-br ${statusGradient[status] || statusGradient.unknown} p-4 text-white shadow-md3-2`}
     >
       <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-md3-md" aria-hidden="true">
         <span className="absolute -right-8 -top-10 block h-32 w-32 rounded-md3-full bg-white/10" />
